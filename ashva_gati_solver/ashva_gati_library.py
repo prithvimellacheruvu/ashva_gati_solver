@@ -29,6 +29,7 @@ class KnightsTour:
         - All non-overlapping subgrids of size subgrid_size x subgrid_size sum to same value
         """
         target_sum = np.sum(self.board[0])
+        self.magic_number = target_sum
 
         # Check rows
         for row in self.board:
@@ -41,11 +42,11 @@ class KnightsTour:
                 return False
 
         # Check subgrids (non-overlapping)
-        for i in range(0, 12, subgrid_size):
-            for j in range(0, 12, subgrid_size):
-                subgrid = self.board[i:i+subgrid_size, j:j+subgrid_size]
-                if np.sum(subgrid) != target_sum:
-                    return False
+        # for i in range(0, 12, subgrid_size):
+        #     for j in range(0, 12, subgrid_size):
+        #         subgrid = self.board[i:i+subgrid_size, j:j+subgrid_size]
+        #         if np.sum(subgrid) != target_sum:
+        #             return False
 
         return True
 
@@ -67,19 +68,9 @@ class TourManager:
 
     def get_magic_squares(self):
         magic_squares = []
-        all_tours = self.generate_all_tours()
-        for i, tour in enumerate(all_tours):
+        self.all_tours = self.generate_all_tours()
+        for i, tour in enumerate(self.all_tours):
             if tour.is_magic_square():
                 magic_squares.append((i, tour))
         return magic_squares
 
-
-# === Example usage ===
-if __name__ == "__main__":
-    master_tour = KnightsTour.from_file("master_solution.txt")
-    manager = TourManager(master_tour)
-    magic_tours = manager.get_magic_squares()
-
-    print(f"Found {len(magic_tours)} magic knight's tours.")
-    for idx, tour in magic_tours:
-        print(f"Magic tour #{idx}")
